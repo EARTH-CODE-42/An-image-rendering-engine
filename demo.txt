@@ -1,0 +1,346 @@
+#小球跳舞
+r=20;
+x=30;
+y=50;
+vx=0.1;vy=0.1;
+while(1){
+   circle(x,y,r);
+   x=x+vx;
+   y=y+vy;
+   if(x>=winw-r||x<r){vx=-vx;vx=vx*1.1;winw=winw+2;color(rgb(rand,rand,rand));}
+   if(y>=winh-r||y<r){vy=-vy;vy=vy*1.1;winh=winh+2;color(rgb(rand,rand,rand));}
+   flush();
+}
+
+#画二叉树
+nodes=6;
+distance=100;
+disx=35;
+disy=15;
+radi=-40;
+func textnode(a,x,y){
+   if(a==0){
+      color(rgb(123,56,223));
+      circle(x+disx,y+disy,radi);
+      text('Apple');
+   }
+   if(a==1){
+      color(rgb(255,134,65));
+      circle(x+disx,y+disy,radi);
+      text('#_#');
+   }
+   if(a==2){
+      color(rgb(34,186,45));
+      circle(x+disx,y+disy,radi);
+      text('Blue');
+   }
+   if(a==3){
+      color(rgb(248,26,54));
+      circle(x+disx,y+disy,radi);
+      text('blue');
+   }
+   if(a==4){
+      color(rgb(56,122,252));
+      circle(x+disx,y+disy,radi);
+      text('pear');
+   }
+   if(a==5){
+      color(rgb(5,232,234));
+      circle(x+disx,y+disy,radi);
+      text('water');
+   }
+}
+array b_tree(nodes*2);
+#5 node
+#data left right
+#2-dimensional array
+func get_tree(i,j){
+   return (b_tree[i*2+j]);
+}
+func add_tree(a,i,j){
+   b_tree[a*2]=i;
+   b_tree[a*2+1]=j;
+}
+func draw_tree(node,x,y){
+   i=0;
+   move(x,y);
+   textnode(node,x,y);
+   left=get_tree(node,0);
+   right=get_tree(node,1);
+   if(left){
+      move(x+disx+sin(PI/4)*radi,y+disy-sin(PI/4)*radi);
+      line(x-distance+disx-sin(PI/4)*radi,y+distance+disy+sin(PI/4)*radi);
+      draw_tree(left,x-distance,y+distance);
+   }
+   if(right){
+      move(x+disx-sin(PI/4)*radi,y+disy-sin(PI/4)*radi);
+      line(x+distance+disx+sin(PI/4)*radi,y+distance+disy+sin(PI/4)*radi);
+      draw_tree(right,x+distance,y+distance);
+   }
+}
+#init everything
+font(32);
+add_tree(0,1,2);
+add_tree(1,3,4);
+add_tree(2,0,0);#(2,0,4)
+add_tree(3,0,0);
+add_tree(4,5,0);
+add_tree(5,0,0);
+draw_tree(0,winw/2,100);
+
+#画日历
+this_year=2023;
+this_month=12;
+this_day=21;
+fsize=30;
+font(fsize);
+x=100;
+y=120;
+disx=70;
+disy=30;
+array month_days(13);
+month_days=0,31,28,31,30,31,30,31,31,30,31,30,31;
+func textday(week){
+   if(week==1){color(rgb(23,224,245));text('Mon');}
+   if(week==2){color(rgb(213,124,45));text('Tues');}
+   if(week==3){color(rgb(243,124,245));text('Wed');}
+   if(week==4){color(rgb(223,14,45));text('Thur');}
+   if(week==5){color(rgb(74,124,245));text('Fri');}
+   if(week==6){color(rgb(64,224,5));text('Sat');}
+   if(week==0){color(rgb(95,124,45));text('Sun');}
+}
+func is_leap_year(year){#leap year
+   if(year%4==0 && year%100!=0){
+      return(1);
+   }
+   if(year%400==0){
+      return(1);
+   }
+   return(0);
+}
+func day_of_the_week(y,m,d){#Zeller formula
+   if(m<=2){
+      y--;
+      m=m+12;
+   }
+   w=(d+2*m+flor(3*(m+1)/5)+y+y/4-flor(y/100)+flor(y/400)+1)%7;
+   return(w);
+}
+func draw_clender(year,month,day){
+   r=1;c=1;
+   move(x,y);
+   if(is_leap_year(year)==1){
+      month_days[2]=29;
+   }else{
+      month_days[2]=28;
+   }
+   text(year,'-',month,'-',day,'\n');
+   i=0;
+   while(i<7){
+      move(x+i*disx,y+r*disy);
+      textday(i);
+      i++;
+   }
+   r=2;
+   i=1;
+   c=day_of_the_week(year,month,1);
+   while(i<=month_days[month]){
+      move(x+c*disx,y+r*disy);
+      if(i==day){
+         color(rgb(185,122,86));
+         circle(x+c*disx+fsize/2.5,y+r*disy+fsize/2,fsize/1.5);
+      }
+      if(c==0||c==6){
+         color(rgb(0,162,232));
+      }else{
+         color(rgb(255,242,0));
+      }
+      text(i);
+      i++;
+      c++;
+      if(c==7){
+         r++;
+         c=0;
+      }
+   }
+}
+draw_clender(this_year,this_month,this_day);
+
+#简单的画作
+graph(x,y){
+   r=20+sin(x-y)*20;
+   g=20+cos(x+y)*20;
+   b=40+sin(x*y)*40;
+   color(rgb(r,g,b));
+   return(1);
+}
+slow(1);
+func star(x,y,s){
+   ss=sin(angle*pi/180)*s;
+   cs=cos(angle*pi/180)*s;
+   cst=sin(angle*2*pi/180)*s;
+   sst=cos(angle*2*pi/180)*s;
+   move(x,y);
+   line(x+s,y);
+   line(x+s-cs,y+ss);
+   line(x+s-cs+sst,y+ss-cst);
+   line(x+cs,y+ss);
+   line(x,y);
+}
+func moon(x,y,s){
+   cycle=40;
+   deltac=255/cycle;
+   deltas=s/cycle;
+   while(cycle){
+      color(rgb(deltac*cycle+sin(clock/90+cycle*0.2)*15+11,
+                deltac*cycle+sin(clock/110+cycle*0.5)*21+15,
+                deltac*cycle+sin(clock/120+cycle*0.9)*27+21));
+      circle(x+sin(cycle/10)*sin(clock/80)*5,y,deltas*cycle);
+      cycle--;
+   }
+}
+func nebula(x,y,s,r,g,b){
+   i=0;
+   cycle=20;
+   deltas=s/cycle;
+   while(i<cycle){
+      deltac=i/cycle;
+      color(rgb(r*deltac,g*deltac,b*deltac));
+      circle(x,y,deltas*(cycle-i));
+      i++;
+   }
+}
+func blackhole(x,y,s){
+   color(rgb(30,0,50));
+   circle(x,y,s);
+}
+func earth(x,y,s){
+   b=s/100;
+   color(rgb(0,128,235));
+   circle(x,y,s);
+   color(rgb(34,177,76));
+   i=200;
+   cycle=0;
+   while(i){
+      r1=sin(clock/1700+cycle/2.3);
+      r2=cos(clock/2100+cycle/3.9);
+      rx=r1*s;
+      ry=r2*s;
+      tx=x+rx;
+      ty=y+ry;
+      if(tx<winw&&ty<winh&&rx^2+ry^2<s^2){
+         circle(tx,ty,b);
+         i--;
+      }
+      cycle++;
+   }
+   i=420;
+   color(rgb(192,192,192));
+   while(i){
+      t=rand;
+      r1=sin(t)*s;
+      r2=cos(t)*s;
+      circle(x+r2,y-r1,b);
+      i--;
+   }
+}
+angle=36+sin(clock/163)*5;
+pi=3.1415+sin(clock/121)*0.5;
+nebula(150,350,40,223,44,22);
+nebula(62,264,54,34,177,76);
+nebula(234,2,174,163,73,164);
+nebula(302,384,64,255,255,0);
+color(rgb(255/2+10+sin(clock/303+0.2)*87,
+          255/2+10+sin(clock/527-0.12)*95,
+          255/2+10+sin(clock/131+0.53)*71));
+star(44,400,sin(clock/501)*10+35);
+star(103,23,sin(clock/303)*7+30);
+star(300,69,cos(clock/442-2.1)*3+20);
+star(370,133,sin(clock/250+3.12)*12+30);
+star(200,234,sin(clock/354-5.39)*14+33);
+moon(120,150,60);
+earth(770,520,500);
+blackhole(200+sin(clock/300)*250,170+sin(clock/400)*50,30);
+
+#函数图像
+graph(x){
+   if(x<=0){
+      a=sin(x/2);
+      b=sin(clock/100+x/3+2.1)*1.4;
+      c=cos(x/3.1)*1.7;
+      d=cos(x*0.2+clock/200)*1.6;
+      return(a+b+c+d);
+   }
+   return(-0.06*x^3+0.22*x^2-2.3*x);
+}
+color(rgb(255,242,0));
+show();
+#二维图像
+color(0);
+graph(x,y){
+   if(x-y){
+      return(sin(x^2+y^2)-cos(x*y));
+   }
+   return(sin(x^2+y^2));
+}
+slow(0);
+show();
+#正弦波干涉
+graph(x,y){
+   yy = y*y;
+   d0 = sqrt((x-1)^2+yy);#distance
+   d1 = sqrt((x+1)^2+yy);
+   d = clock*0.02;
+   d0 = sin((d0-d)*16);#shift+shrink
+   d1 = sin((d1-d)*16);
+   g = (d0+d1)*64+128;#add energy
+   r = d0*64+128;
+   b = d1*64+128;
+   color(rgb(r,g,b));
+   return(1);
+}
+#曼德勃罗
+color(rgb(255,255,0));
+graph(x,y){
+   c = 1; ox = x; oy = y;
+   while(c>0){
+      xx = x*x; yy = y*y;
+      if (xx+yy >= 4) {return(c);}
+      y = x*y*2+oy;
+      x = xx-yy+ox;
+      c = c-1/32;
+   }
+   return(c);
+}
+slow(0);
+
+
+
+
+
+
+
+
+
+
+
+
+a='a';
+b='b';
+c='c5d';
+d=42;
+e=56;
+a.car=b.add;
+a.cdr=c.add;
+b.car=d.add;
+b.cdr=e.add;
+traverse(a);
+
+p=b;//不要全拷贝，为什么？
+p=b+3;//因此只能赋值
+p=b.car;//p.val=b.car.value
+若要指定拷贝值，则p.val=b.car
+b.car=34;//×
+b.car.cdr=er;//改变的是指针
+b.cdr.val=45;//则改变的是e.val
+b=45;等价于b.val=45;
