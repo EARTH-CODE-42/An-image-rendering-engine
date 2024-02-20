@@ -1,1 +1,3 @@
 # An-image-rendering-engine
+This project designed a programming language similar to the syntax of C, and realized the corresponding text editor, lexical analyzer, code interpreter, using multithreading to ensure program responsiveness, and finally realized a dynamic graphics rendering language integration engine, and finally designed a series of small programs using the language. The engine can achieve the purpose of designing graphic prototype quickly and testing algorithm efficiency. At the same time, the syntax is simple, the interface is concise, the function is rich, and it has a certain application prospect.
+本项目设计了一个语法类似C的编程语言，并实现了对应的文本编辑器、词法分析器、代码解释器，使用多线程保证程序响应性，最终实现了一个动态图形绘制语言集成引擎，最后使用该语言设计了一系列小程序。该引擎能达到快速设计图形原型，测试算法效率的目的，同时语法简单，界面简洁，功能丰富，具有一定的的应用前景。
